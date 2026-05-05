@@ -174,9 +174,11 @@ The cell that distinguishes this protocol: **append-only contract + spec-negotia
 - [x] Public release (this repo)
 - [x] Spark single-host deployment with mcp_agent_mail layered (2026-05-04, see `examples/spark-tunnel.sh`)
 - [x] Cross-machine transport spec + reference daemon (2026-05-05, see `examples/git-as-wire/`)
+- [x] v3 Ed25519 signed messages — spec + reference impl + live cross-machine validation (2026-05-05, see `v3/`)
+- [x] Idempotency cache for replay-attack mitigation (`examples/idempotency.py`)
+- [x] N-agent (n>2) generalization spec draft (see `v4/N-AGENT.md`)
 - [ ] Cross-organization stress test on git-as-wire (target: 2026-05-15)
-- [ ] HMAC signing extension for adversarial scenarios (v3 spec)
-- [ ] N-agent generalization (currently optimized for n=2)
+- [ ] N-agent reference implementation
 - [ ] Reference implementation in TypeScript (currently bash + Python helpers)
 
 ---

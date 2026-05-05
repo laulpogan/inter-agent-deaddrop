@@ -1,5 +1,30 @@
 # Changelog
 
+## v3.0 — 2026-05-05 (signed messages)
+
+**Ed25519 signed messages.** Cryptographic identity for adversarial scenarios.
+
+### Added
+- `v3/SIGNING.md`: full spec
+- `v3/signing.py`: sign/verify helpers (PyNaCl or `cryptography` backend)
+- `v3/keygen.py`: CLI to generate Ed25519 keypair per agent
+- `v3/verify.py`: pre-commit hook blocking unsigned/invalid messages
+- `v3/test_signing.py`: 8 round-trip tests
+- `v3/README.md`: quick-start
+- `examples/idempotency.py`: replay-detection cache (closes the v3 replay-attack gap)
+- `v4/N-AGENT.md`: spec draft for n>2 generalization (not implemented)
+
+### Validated
+- Live cross-machine signed exchange between Mac (paul-mac) and Linux (paul-spark)
+- Forgery rejection: tampered messages fail verification
+- Unknown / deactivated keys correctly rejected
+- Backward compat: v2.0 unsigned messages on the same JSONL correctly REJECTED in v3-strict mode
+
+### Notes
+- v3 closes sender-forgery + tamper-detection. Replay-attack closure depends on idempotency cache.
+- Key rotation procedure documented (bilateral proposal + ack, 24h grace period)
+- Compromise response procedure documented (out-of-band identity proof)
+
 ## v2.1 — 2026-05-05
 
 **git-as-wire transport.** Cross-machine, cross-organization deployments without shared host.
