@@ -1,5 +1,27 @@
 # Changelog
 
+## v2.1 — 2026-05-05
+
+**git-as-wire transport.** Cross-machine, cross-organization deployments without shared host.
+
+### Added
+- `examples/git-as-wire/` — reference implementation for git-backed transport
+  - `README.md`: deployment recipe + threat model + comparison
+  - `wire-daemon.py`: sync daemon (file-watch + heartbeat poll + push/fetch with retry)
+  - `wire-daemon.service`: systemd user unit
+  - `test/test-roundtrip.sh`: local two-clone integration test (passes)
+- `examples/spark-tunnel.sh`: SSH tunnel helper for single-shared-host deployments
+- `examples/spark-mcp-config.json`: project-level `.mcp.json` snippet for Claude Code wire-up
+
+### Changed
+- `TRANSPORTS.md`: git-as-wire marked as documented + locally validated
+- `README.md`: roadmap updated to reflect shipped Spark deployment + git-as-wire transport
+
+### Notes
+- Cross-machine E2E validated 2026-05-05 between Mac (paul-mac) and Linux (paul-spark) over a private GitHub repo. Full round-trip (heartbeat + ack) completed in ~30s with daemons running in `--once` mode on each side. Wire repo log shows clean commit ordering.
+- True cross-organization (independent operator on the other side) stress test still pending
+- HMAC-signing extension still planned for v3 (adversarial scenarios)
+
 ## v2.0 — 2026-04-24
 
 **Major redesign.** Bilateral autonomy + heartbeat tiers + 8 invariants.

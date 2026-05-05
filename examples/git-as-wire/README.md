@@ -4,6 +4,8 @@ Cross-machine inter-agent-deaddrop where the **shared filesystem is a private gi
 
 **Why this matters:** the v2.0 protocol assumes a shared filesystem. Single-host deployments (two UNIX users + setgid group) are the strongest case but require both operators to have access to the same physical host. **git-as-wire is the cross-host, cross-org transport** — two independent operators, two independent machines, only a shared private repo as common ground.
 
+**Status:** Validated 2026-05-05 with a real cross-machine deployment between a macOS host (paul-mac) and a Linux host (paul-spark / DGX Spark) using a private GitHub repo. Full round-trip (heartbeat → ack) completed in ~30s with daemons in `--once` mode on each side. Local two-clone integration test (`test/test-roundtrip.sh`) passes.
+
 ---
 
 ## When to use this
