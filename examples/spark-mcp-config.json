@@ -1,0 +1,18 @@
+{
+  "_comment": "Project-level .mcp.json snippet for connecting Mac Claude Code to mcp_agent_mail running on the Spark via SSH tunnel. Place at the root of the local clone of willard-plotter-pipeline.",
+  "_setup": [
+    "1. Open SSH tunnel from Mac: ssh -fN -L 8775:127.0.0.1:8765 promaxgb10-d325",
+    "2. Verify: lsof -i :8775 shows ssh listening",
+    "3. Pull bearer token from Spark: ssh promaxgb10-d325 'cat ~/.config/mcp_agent_mail/server_token' > ~/.config/mcp_agent_mail/spark_token",
+    "4. Copy this file to the project root as .mcp.json (replace REPLACE_ME with the token contents)"
+  ],
+  "mcpServers": {
+    "agent-mail": {
+      "type": "http",
+      "url": "http://127.0.0.1:8775/api/",
+      "headers": {
+        "Authorization": "Bearer REPLACE_ME"
+      }
+    }
+  }
+}
