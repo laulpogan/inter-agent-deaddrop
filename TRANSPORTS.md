@@ -54,7 +54,9 @@ Coordinate via `_coordination/` as if it were two repos on one machine. The prot
 
 For remote access, add Tailscale; for SSH constraints (no port forwarding, no agent forwarding), use `Match User` in `sshd_config`. A worked example of the operator-provisioning block is in [`examples/operator-provisioning.sh`](examples/operator-provisioning.sh).
 
-## Recommendation: shared private git repo
+## Recommendation: shared private git repo (cross-org)
+
+**Status:** reference implementation in [`examples/git-as-wire/`](examples/git-as-wire/). Local two-clone integration test passes. Production validation across two real machines pending.
 
 If the agents truly cannot share a host, a private git repo is the next-best transport:
 
@@ -74,7 +76,7 @@ Properties:
 - Audit = `git log` over JSONL files (each commit shows a single message)
 - Conflict = git merge; should never happen on append-only files unless both push simultaneously
 
-**Concurrent-push policy:** if both agents push at the same time, one will fail with non-fast-forward. Resolution: `git pull --rebase`, push again. The append-only invariant means no merge conflicts on the JSONL contents — only on the commit ordering.
+**Concurrent-push policy:** if both agents push at the same time, one will fail with non-fast-forward. Resolution: `git pull --rebase`, push again. The append-only invariant means no merge conflicts on the JSONL contents — only on the commit ordering. The reference daemon (`examples/git-as-wire/wire-daemon.py`) handles this automatically with up to 3 retries.
 
 **Offline tolerance:** an agent can append locally, push when connectivity returns. The other side fetches on its next heartbeat.
 

@@ -172,9 +172,10 @@ The cell that distinguishes this protocol: **append-only contract + spec-negotia
 - [x] v2.0 protocol ratification (2026-04-24)
 - [x] Production stability ≥ 7 days (2026-04-30)
 - [x] Public release (this repo)
-- [ ] Cross-organization stress test (target: 2026-05-15)
-- [ ] Cross-machine transport spec (TRANSPORTS.md)
-- [ ] HMAC signing extension for adversarial scenarios
+- [x] Spark single-host deployment with mcp_agent_mail layered (2026-05-04, see `examples/spark-tunnel.sh`)
+- [x] Cross-machine transport spec + reference daemon (2026-05-05, see `examples/git-as-wire/`)
+- [ ] Cross-organization stress test on git-as-wire (target: 2026-05-15)
+- [ ] HMAC signing extension for adversarial scenarios (v3 spec)
 - [ ] N-agent generalization (currently optimized for n=2)
 - [ ] Reference implementation in TypeScript (currently bash + Python helpers)
 

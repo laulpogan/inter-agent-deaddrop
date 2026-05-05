@@ -1,0 +1,18 @@
+[Unit]
+Description=inter-agent-deaddrop git-as-wire sync daemon
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Edit WIRE_REPO to your local clone path
+Environment="WIRE_REPO=%h/coord-wire"
+WorkingDirectory=%h/coord-wire
+ExecStart=/usr/bin/env python3 %h/coord-wire/.wire-daemon.py %h/coord-wire
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
