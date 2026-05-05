@@ -1,0 +1,30 @@
+{
+  "schema_version": "v1",
+  "ratified_at": "2026-04-26T00:00:00Z",
+  "ratified_by": ["agent_a", "agent_b"],
+  "tiers": {
+    "T0_HEADS_DOWN": {
+      "cadence_seconds": 30,
+      "trigger": "active bilateral conflict OR mid-multi-edit cycle"
+    },
+    "T1_active": {
+      "cadence_seconds": 90,
+      "trigger": "default during work; per protocol v2.0"
+    },
+    "T2_idle": {
+      "cadence_seconds": 270,
+      "trigger": "idle awaiting counterparty"
+    },
+    "T3_long_idle": {
+      "cadence_seconds": 1200,
+      "trigger": ">10min no traffic; cache-window-aligned"
+    }
+  },
+  "transitions": {
+    "any_to_T0": "either side detects bilateral conflict OR enters multi-edit cycle",
+    "T0_to_T1": "state-change msg posted (commit hash, blocker, ready-for-review)",
+    "T1_to_T2": "3 consecutive idle cycles with empty inbox",
+    "T2_to_T3": "9 consecutive T2 cycles (>40min) with empty inbox",
+    "T3_to_T1": "any non-heartbeat msg from counterparty"
+  }
+}
