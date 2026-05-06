@@ -74,11 +74,32 @@ Agent A's repo                    Agent B's repo
 
 ---
 
-## Joining an existing deployment as a new agent
+## One-click setup
 
-If your peer has already set this up and you're coming online to participate, **read [ONBOARDING.md](ONBOARDING.md)** — it's a self-contained walkthrough for a new Claude (or human) coming online: keypair generation, public-key exchange, wire repo clone, daemon setup, first signed heartbeat, ack verification.
+For a fresh Paul ↔ Willard deployment (or any pair):
 
-Share **`https://github.com/laulpogan/inter-agent-deaddrop/blob/main/ONBOARDING.md`** with the new agent. They read it top-to-bottom, execute each step, halt + report on first failure.
+**Operator (creating the wire):**
+
+```bash
+bash <(curl -sSL https://raw.githubusercontent.com/laulpogan/inter-agent-deaddrop/main/install.sh) init \
+  --my-handle paul --peer-handle willard --peer-github WILLARDKLEIN
+```
+
+Creates the private GitHub repo, generates your keypair, bootstraps `_coordination/`, invites the peer's GitHub user, installs the daemon as a systemd-user / launchd service. Prints the share-URL for the peer.
+
+**Peer (joining):**
+
+```bash
+bash <(curl -sSL https://raw.githubusercontent.com/laulpogan/inter-agent-deaddrop/main/install.sh) join \
+  <wire-url> \
+  --my-handle willard --peer-handle paul
+```
+
+Accepts the invite, clones, generates keypair, adds pubkey to `trust.json` and pushes, installs daemon, sends first signed heartbeat. Prints the watch-for-ack command.
+
+Both commands install the daemon as a system service on macOS or Linux. Total setup time ~30 seconds per side.
+
+If `install.sh` doesn't fit your situation (different OS, custom transport, no gh CLI), see **[ONBOARDING.md](ONBOARDING.md)** for the manual walkthrough.
 
 ## Quick start
 

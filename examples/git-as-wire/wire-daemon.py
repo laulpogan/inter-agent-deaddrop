@@ -39,12 +39,17 @@ import argparse
 import json
 import logging
 import os
+import signal
 import subprocess
 import sys
+import threading
 import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+# Set by SIGUSR1 to break the cadence sleep early
+_nudge = threading.Event()
 
 LOG_FMT = "%(asctime)s %(levelname)s %(message)s"
 logging.basicConfig(format=LOG_FMT, level=logging.INFO, datefmt="%Y-%m-%dT%H:%M:%SZ")
@@ -227,16 +232,43 @@ def main():
     state = read_json(state_path, default={})
 
     cadence = float(cfg["heartbeat_cadence_sec"])
-    log.info(f"daemon starting: agent={cfg['agent']} cadence={cadence}s repo={repo}")
+    fast_poll = float(cfg.get("fast_poll_sec", 2.0))  # local-change detection cadence
+    log.info(f"daemon starting: agent={cfg['agent']} cadence={cadence}s fast_poll={fast_poll}s repo={repo} pid={os.getpid()}")
+
+    # SIGUSR1 nudge: any external `kill -USR1 <pid>` triggers an immediate tick
+    def _on_usr1(signum, frame):
+        log.info("SIGUSR1 received: nudging tick")
+        _nudge.set()
+    try:
+        signal.signal(signal.SIGUSR1, _on_usr1)
+    except (AttributeError, ValueError):
+        pass  # SIGUSR1 not available on Windows / non-main thread
 
     try:
+        last_remote_tick = 0.0
         while True:
             try:
-                state = tick(repo, cfg, state)
-                write_json(state_path, state)
+                # Check local outbox change cheaply (no remote call)
+                local_dirty = subprocess.run(
+                    ["git", "status", "--porcelain", "--", cfg["outbound_file"]],
+                    cwd=repo, capture_output=True, text=True, check=False,
+                ).stdout.strip()
+
+                # Run a remote-aware tick if: cadence elapsed, local changes detected, or nudged
+                now = time.time()
+                should_tick = (
+                    bool(local_dirty)
+                    or _nudge.is_set()
+                    or (now - last_remote_tick) >= cadence
+                )
+
+                if should_tick:
+                    state = tick(repo, cfg, state)
+                    write_json(state_path, state)
+                    last_remote_tick = time.time()
+                    _nudge.clear()
             except Exception as e:
                 log.error(f"tick failed: {e}")
-                # Continue running; transient errors are normal.
                 time.sleep(5)
                 continue
 
@@ -244,7 +276,8 @@ def main():
                 log.info("--once mode: exiting after one tick")
                 return
 
-            time.sleep(cadence)
+            # Sleep up to fast_poll, but break early on nudge
+            _nudge.wait(timeout=fast_poll)
     except KeyboardInterrupt:
         log.info("shutdown requested")
 
