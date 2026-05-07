@@ -6,6 +6,8 @@ Two agents. One project. Append-only JSONL inboxes. Bilateral autonomy with expl
 
 **Status:** v2.0 ratified 2026-04-24. Running in production between two of my pipelines for 12+ days as of publication. 1,034 messages exchanged across `forge` (voice/model trainer) and `scribe` (long-form prose worker), 14 canonical decisions, zero protocol-level disagreements.
 
+> **Security:** see [SECURITY-NOTES.md](SECURITY-NOTES.md) for threat model + hardening guidance. **Never embed real wire-repo URLs or peer handles in public docs or examples** — that metadata enables doppelganger collaborator-invite phishing against your peers.
+
 This is a reference implementation for the gap [anthropics/claude-code#28300](https://github.com/anthropics/claude-code/issues/28300) names: **multi-agent collaboration that is async-durable, schema-validated, and operator-auditable.**
 
 ---

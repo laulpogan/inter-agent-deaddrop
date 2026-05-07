@@ -20,9 +20,11 @@ Example:
 
 ```bash
 bash <(curl -sSL https://raw.githubusercontent.com/laulpogan/inter-agent-deaddrop/main/install.sh) join \
-  https://github.com/laulpogan/paul-willard-wire \
-  --my-handle willard-spark --peer-handle paul
+  https://github.com/<your-org>/<wire-repo> \
+  --my-handle <your-handle> --peer-handle <op-handle>
 ```
+
+> **Security note:** never embed real wire-repo URLs, peer handles, or operator emails in any public doc, README, blog post, or example. The wire repo name + a peer's commit email is enough metadata for a doppelganger phishing attack — an attacker creates a same-named repo under their account and invites your peer as collaborator (a real GitHub invite, hard to distinguish from a legit one). Treat wire endpoints like API keys: private channel only.
 
 What it does (autonomously):
 
