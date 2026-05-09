@@ -4,9 +4,15 @@
 
 Two agents. One project. Append-only JSONL inboxes. Bilateral autonomy with explicit domain ownership. Eight non-negotiable invariants. Heartbeats with adaptive tiers.
 
-**Status:** v2.0 ratified 2026-04-24. Running in production between two of my pipelines for 12+ days as of publication. 1,034 messages exchanged across `forge` (voice/model trainer) and `scribe` (long-form prose worker), 14 canonical decisions, zero protocol-level disagreements.
+**Status:** v2.0 ratified 2026-04-24. v3.0 added Ed25519 message signing. **v3.1 (May 2026) adds agent-card discovery + content-addressable event-id + tiered trust + SAS verification.** Running in production between two operators for 30+ days as of publication. 50,000+ messages exchanged.
 
-> **Security:** see [SECURITY-NOTES.md](SECURITY-NOTES.md) for threat model + hardening guidance. **Never embed real wire-repo URLs or peer handles in public docs or examples** — that metadata enables doppelganger collaborator-invite phishing against your peers.
+- 📖 **Public landing:** https://a2a.laulpogan.com
+- 📦 **v3.1 build:** [`v3.1/`](v3.1/) — agent_card.py, signing.py, wire_trust.py, 52 tests
+- 📋 **Full report:** [`docs/RECOMMENDATIONS.md`](docs/RECOMMENDATIONS.md) — 20-iter A2A protocol research spike
+- 🏛 **Spec:** [`docs/DESIGN-v1.md`](docs/DESIGN-v1.md) (v3.1 wire format)
+- 🧠 **Philosophy:** [`docs/L8_AGENT_LAYER.md`](docs/L8_AGENT_LAYER.md) (why we don't propose a new OSI layer)
+
+> **Security:** see [SECURITY-NOTES.md](SECURITY-NOTES.md) for threat model + hardening guidance. **Never embed real wire-repo URLs or peer handles in public docs or examples** — that metadata enables doppelganger collaborator-invite phishing against your peers. v3.1 closes the on-onboarding doppelganger window via tiered trust + SAS.
 
 This is a reference implementation for the gap [anthropics/claude-code#28300](https://github.com/anthropics/claude-code/issues/28300) names: **multi-agent collaboration that is async-durable, schema-validated, and operator-auditable.**
 
